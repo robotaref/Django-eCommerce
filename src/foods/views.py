@@ -6,12 +6,29 @@ from .models import Food
 
 class FoodListView(ListView):
     queryset=Food.objects.all()
-    template_name = 'foods/food_list.html'
+    template_name = 'foods/list.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(FoodListView, self).get_context_data(*args, **kwargs)
         print(context)
         return context
+
+
+class FoodDetailsSlugView(DetailView):
+    queryset =  Food.objects.all()
+    template_name = 'foods/detail.html'
+
+    def get_object(self, *args,**kwargs):
+        request = self.request
+        slug=self.kwargs.get('slug')
+        try:
+            instance = Food.objects.get(slug=slug,active=True)
+        except Food.DoesNotExist:
+            raise Http4('not found')
+        except Food.MultipleObjectsReturned:
+            qs=Food.objects.filter(slug=slug,active=Ture)
+            instance= qs.first()
+        return instance
 
 
 def food_list_view(request):
@@ -39,3 +56,8 @@ def food_detail_view(request, pk=None):
     }
     print(instance)
     return render(request, 'foods/detail.html', context)
+
+
+class FoodDetailSlugView(DetailView):
+    queryset = Food.objects.all()
+    template_name = 'foods/detail.html'

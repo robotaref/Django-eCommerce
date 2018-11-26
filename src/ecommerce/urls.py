@@ -15,23 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.contrib import admin
 from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
-from foods.views import FoodListView,food_list_view,FoodDetailView,food_detail_view
+from foods.urls import *
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^$', home_page),
+    url(r'^$', home_page, name='home'),
     url(r'^login/$', login_page),
     url(r'^register_food/$', register_food_page),
-    url(r'^foods/$', FoodListView.as_view()),
-    url(r'^foods_fv/$', food_list_view),
-    url(r'^foods/(?P<pk>\d+)/$', FoodDetailView.as_view()),
-    url(r'^foods_fv/(?P<pk>\d+)/$', food_detail_view),
+    url(r'^foods/',include(('foods.urls','foods'),namespace='foods')),
     url(r'^register/$', register_page),
     url(r'^admin/', admin.site.urls),
+    url(r'^bootstrap/$',TemplateView.as_view(template_name='bootstrap/example.html'))
+
 ]
 if settings.DEBUG:
     urlpatterns = urlpatterns + static(settings.STATIC_URL,

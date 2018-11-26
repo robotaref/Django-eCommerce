@@ -1,4 +1,17 @@
+{%extends 'base.html' %}
 
-{{object_list.title}} <br/>
+{% block content%}
+<div class="select2-container">
+    <div class="row1">
+        <div class="col">
+            <h1> {{object.title}} <h1/>
+            {{object.restaurant|linebreaks}} <br/>
 
-{{object_list.price}} <br/>
+            {%if object.image %}
+                <img src="{{object.image.url}}" class="img-fluid" />
+            {%endif%}
+        </div>
+    </div>
+
+</div>
+{%endblock%}
